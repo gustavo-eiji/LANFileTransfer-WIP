@@ -2,7 +2,9 @@ from devicemanager import DeviceManager
 from discovery import Discovery
 import uuid
 
-from transfer import TransferServer
+from gui import MainWindow
+from transfer import TransferServer, TransferClient
+
 
 # TODO:
 # Discovery and TransferServer will eventually run in background threads.
@@ -17,7 +19,18 @@ def main():
     discovery = Discovery(device_manager, device_id)
 
     transfer_server = TransferServer()
-    # No network traffic up to this point
+
+    transfer_client = TransferClient()
+
+    gui = MainWindow(
+        device_manager=device_manager,
+        discovery=discovery,
+        transfer_server=transfer_server,
+        transfer_client=transfer_client,
+    )
+
+
+    gui.run()
 
     try:
         # Advertises this computer to the network

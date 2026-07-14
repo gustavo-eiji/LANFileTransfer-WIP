@@ -6,11 +6,8 @@ PORT = 50007
 
 client = TransferClient()
 
-message = Message(
-    message_type=MessageType.TEXT,
-    payload={
-        "text": "Hello from the client!"
-    }
+client.send_file(
+    path=r"C:\Users\get21\Pictures\Wallpapers\1743528206706.jpeg",
+    host=HOST,
+    port=PORT,
 )
-
-client.send_message(HOST, PORT, message)
