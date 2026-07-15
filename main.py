@@ -27,8 +27,6 @@ def main():
 
     discovery = Discovery(device_manager, device_id, transfer_port=50007)
 
-    transfer_server = TransferServer()
-
     transfer_client = TransferClient()
 
     gui = MainWindow(

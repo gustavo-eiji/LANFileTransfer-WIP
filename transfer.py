@@ -26,6 +26,8 @@ class TransferServer:
 
     def __init__(self, host: str = "", port: int = 50007):
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR,1)
+
         self.host = host
         self.port = port
         self.running = False
@@ -41,7 +43,7 @@ class TransferServer:
 
     def stop(self) -> None:
         self.running = False
-        self.server_socket.close()
+        self.server_socket.settimeout(1.0)
 
     # accept_connections keeps listening, conn represents one connected client
     def accept_connections(self):
@@ -50,8 +52,8 @@ class TransferServer:
                 conn, addr = self.server_socket.accept()
                 print(f"{addr} connected")
 
-            except OSError:
-                break
+            except socket.timeout:
+                continue
 
             self.handle_client(conn, addr)
 
