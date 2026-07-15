@@ -58,6 +58,8 @@ class MyListener(ServiceListener):
         )
         self.device_manager.add_device(service_name=name,device=device)
 
+        print(self.device_manager.devices)
+
 
 
 def get_local_ip() -> str:
@@ -90,7 +92,7 @@ def get_operating_system() -> str:
 
 class Discovery:
 
-    def __init__(self, device_manager: DeviceManager, device_id: str):
+    def __init__(self, device_manager: DeviceManager, device_id: str, transfer_port: int):
         self.zeroconf = Zeroconf()
         self.device_manager = device_manager
         self.device_id = device_id
@@ -110,7 +112,7 @@ class Discovery:
         self.service_info: ServiceInfo = ServiceInfo(type_="_myshare._tcp.local.",
                                    name= f"{self.hostname}._myshare._tcp.local.",
                                    addresses=[socket.inet_aton(self.ip_address)],
-                                   port=8000,
+                                   port=transfer_port,
                                    properties=self.properties
                                    )
 

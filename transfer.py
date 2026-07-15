@@ -28,8 +28,10 @@ class TransferServer:
         self.server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.host = host
         self.port = port
+        self.running = False
 
     def start(self):
+        self.running = True
         # reserves a port on your computer
         self.server_socket.bind((self.host, self.port))
         # Waits for a client
@@ -38,15 +40,19 @@ class TransferServer:
         self.accept_connections()
 
     def stop(self) -> None:
+        self.running = False
         self.server_socket.close()
 
     # accept_connections keeps listening, conn represents one connected client
     def accept_connections(self):
-        while True:
-            # (!) Currently accept() waits indefinitely for a client (!)
-            # Requires running flag and exception handling if threads are introduced
-            conn, addr = self.server_socket.accept()
-            print(f"{addr} connected")
+        while self.running:
+            try:
+                conn, addr = self.server_socket.accept()
+                print(f"{addr} connected")
+
+            except OSError:
+                break
+
             self.handle_client(conn, addr)
 
     # WIP, currently method 'handle_client' may be 'static'
@@ -135,6 +141,7 @@ class TransferClient:
 
             if reply.message_type != MessageType.FILE_ACCEPT:
                 print("Transfer rejected.")
+
                 return
 
             print("Transfer accepted.")

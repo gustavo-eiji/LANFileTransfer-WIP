@@ -39,15 +39,13 @@ class MainWindow:
         self.root.mainloop()
 
     def on_close(self):
-        self.discovery.stop()
-        self.transfer_server.stop()
         self.root.destroy()
 
     def create_table(self):
 
         self.device_table = ttk.Treeview(
             self.root,
-            columns=("hostname", "os", "ip"),
+            columns=("hostname", "os", "ip", "port"),
             show="headings",
             height=12,
         )
@@ -55,10 +53,12 @@ class MainWindow:
         self.device_table.heading("hostname", text="Hostname")
         self.device_table.heading("os", text="OS")
         self.device_table.heading("ip", text="IP Address")
+        self.device_table.heading("port", text="Port")
 
         self.device_table.column("hostname", width=250)
         self.device_table.column("os", width=120)
         self.device_table.column("ip", width=180)
+        self.device_table.column("port", width=180)
 
         self.device_table.pack(fill="both", expand=True, padx=10, pady=10)
 
@@ -95,6 +95,7 @@ class MainWindow:
                     device.hostname,
                     device.operating_system,
                     device.ip_address,
+                    device.port,
                 )
             )
 
