@@ -12,15 +12,15 @@ class MessageType(Enum):
     FILE_ACCEPT = "FILE_ACCEPT"
     FILE_REJECT = "FILE_REJECT"
 
-    FILE_DATA = "FILE_DATA"
-    FILE_COMPLETE = "FILE_COMPLETE"
+    # FILE_DATA = "FILE_DATA"
+    # FILE_COMPLETE = "FILE_COMPLETE"
 
     ERROR = "ERROR"
 
 @dataclass
 class Message:
     message_type: MessageType
-    payload: dict[str, Any]
+    payload: dict[str, Any] | None = None
 
 def encode_message(message: Message) -> bytes:
     # Serialize a Message object into UTF-8 encoded JSON bytes.
