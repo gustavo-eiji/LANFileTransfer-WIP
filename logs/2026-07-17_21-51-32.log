@@ -1,0 +1,7 @@
+Service MacBookPro.local[macOS]._myshare._tcp.local. added
+{'e3bd3478-dc1d-4093-a78b-b94fa34547d3': Device(device_id='e3bd3478-dc1d-4093-a78b-b94fa34547d3', hostname='MacBookPro.local', ip_address='10.0.0.230', port=50007, operating_system='macOS', version='ver. alpha 0.1', is_local=False)}
+Service DESKTOP-K28B409[Windows]._myshare._tcp.local. added
+{'e3bd3478-dc1d-4093-a78b-b94fa34547d3': Device(device_id='e3bd3478-dc1d-4093-a78b-b94fa34547d3', hostname='MacBookPro.local', ip_address='10.0.0.230', port=50007, operating_system='macOS', version='ver. alpha 0.1', is_local=False), '4ef1861c-71c0-44f4-8091-242361cb6f9b': Device(device_id='4ef1861c-71c0-44f4-8091-242361cb6f9b', hostname='DESKTOP-K28B409', ip_address='10.0.0.31', port=50007, operating_system='Windows', version='ver. alpha 0.1', is_local=False)}
+True
+Listening...
+Service DESKTOP-K28B409[Windows]._myshare._tcp.local. removed

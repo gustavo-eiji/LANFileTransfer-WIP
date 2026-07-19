@@ -1,5 +1,0 @@
-Service Keter[Windows]._myshare._tcp.local. added
-{'1f93050f-47f6-4291-beb4-608603c1d9e2': Device(device_id='1f93050f-47f6-4291-beb4-608603c1d9e2', hostname='Keter', ip_address='192.168.15.2', port=50007, operating_system='Windows', version='ver. alpha 0.1', is_local=False)}
-True
-Listening...
-Service Keter[Windows]._myshare._tcp.local. removed

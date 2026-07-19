@@ -1,0 +1,3 @@
+Service DESKTOP-K28B409[Windows]._myshare._tcp.local. added
+{'1de021eb-e69b-46ee-8735-7cf72d98b5fd': Device(device_id='1de021eb-e69b-46ee-8735-7cf72d98b5fd', hostname='DESKTOP-K28B409', ip_address='10.0.0.31', port=50007, operating_system='Windows', version='ver. alpha 0.1', is_local=False)}
+Service DESKTOP-K28B409[Windows]._myshare._tcp.local. removed
