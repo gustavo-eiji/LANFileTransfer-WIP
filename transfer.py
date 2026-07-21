@@ -53,11 +53,13 @@ class TransferServer:
             try:
                 conn, addr = self.server_socket.accept()
                 print(f"{addr} connected")
+                conn.settimeout(30)
 
             except socket.timeout:
                 continue
 
             self.handle_client(conn, addr)
+
 
     def handle_client(self, conn, addr):
         print(f"Handling client {addr}")
@@ -136,35 +138,40 @@ class TransferServer:
 
         received = 0
 
-        with open(filename, "wb") as file:
+        try:
+            with open(filename, "wb") as file:
 
-            while received < filesize:
+                while received < filesize:
 
-                remaining = filesize - received
+                    remaining = filesize - received
 
-                chunk = conn.recv(
-                    min(TRANSFER_BUFFER_SIZE, remaining)
-                )
-
-                if not chunk:
-                    raise ConnectionError(
-                        "Connection lost during transfer."
+                    chunk = conn.recv(
+                        min(TRANSFER_BUFFER_SIZE, remaining)
                     )
 
-                file.write(chunk)
+                    if not chunk:
+                        raise ConnectionError("Connection lost during transfer.")
 
-                received += len(chunk)
+                    file.write(chunk)
+                    received += len(chunk)
 
-                print(
-                    f"Received {received}/{filesize} bytes"
-                )
+                    print(f"Received {received}/{filesize} bytes")
 
-        print("Transfer complete.")
+            print("Transfer complete.")
+
+        except socket.timeout:
+            print("Connection timed out.")
+        except ConnectionError as e:
+            print(e)
+        if received != filesize:
+            print("File transfer incomplete.")
 
 ### CLIENT SIDE ###
 class TransferClient:
     def send_message(self, host: str, port: int, message: Message) -> Message:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
+            client_socket.settimeout(30)
+
             client_socket.connect((host, port))
 
             self.send_packet(client_socket, message)
@@ -174,7 +181,7 @@ class TransferClient:
             return reply
 
 
-    def send_file(self, path: str, host: str, port: int) -> bytes | None:
+    def send_file(self, path: str, host: str, port: int, progress_callback=None) -> bytes | None:
 
         filename = Path(path).name
         filesize = os.path.getsize(path)
@@ -205,37 +212,9 @@ class TransferClient:
             self.stream_file(
                 client_socket,
                 path,
+                progress_callback,
             )
 
-            # chunk_number = 0
-            # with open(path, "rb") as file:
-            #     while True:
-            #         chunk = file.read(4096)
-            #
-            #         if not chunk:
-            #             break
-            #
-            #         chunk_number += 1
-            #         print(f"Sending chunk {chunk_number} ({len(chunk)} bytes)")
-            #
-            #         data_message = Message(
-            #             message_type=MessageType.FILE_DATA,
-            #             payload={
-            #                 "data": base64.b64encode(chunk).decode("ascii")
-            #             }
-            #         )
-            #
-            #         self.send_packet(client_socket, data_message)
-            #
-            # # Send FILE_COMPLETE
-            # complete = Message(
-            #     message_type=MessageType.FILE_COMPLETE,
-            #     payload={}
-            # )
-            #
-            # self.send_packet(client_socket, complete)
-            #
-            # print("Transfer complete.")
 
     def receive_packet(self, conn) -> Message | None:
         header = recv_exact(conn, 4)
@@ -260,7 +239,7 @@ class TransferClient:
         conn.sendall(header)
         conn.sendall(data)
 
-    def stream_file(self, conn, path):
+    def stream_file(self, conn, path, progress_callback=None):
 
         sent = 0
 
@@ -279,8 +258,16 @@ class TransferClient:
 
                 sent += len(chunk)
 
-                print(
-                    f"Sent {sent}/{filesize} bytes"
-                )
+                # print(
+                #     f"Sent {sent}/{filesize} bytes"
+                # )
 
-        print("Transfer complete.")
+        # print("Transfer complete.")
+
+                if filesize:
+                    percent = (sent/filesize) * 100
+                else:
+                    percent=100
+
+                if progress_callback:
+                    progress_callback(percent)

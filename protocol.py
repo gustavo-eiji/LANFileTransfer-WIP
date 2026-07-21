@@ -12,9 +12,6 @@ class MessageType(Enum):
     FILE_ACCEPT = "FILE_ACCEPT"
     FILE_REJECT = "FILE_REJECT"
 
-    # FILE_DATA = "FILE_DATA"
-    # FILE_COMPLETE = "FILE_COMPLETE"
-
     ERROR = "ERROR"
 
 @dataclass

@@ -25,7 +25,7 @@ def main():
     # Give this instance a different advertised name
     discovery.hostname = f"{socket.gethostname()}-Dummy[Windows]"
     discovery.service_info.name = (
-        f"{discovery.hostname}._myshare._tcp.local."
+        f"{discovery.hostname}._lanfiletransfer._tcp.local."
     )
 
     transfer_client = TransferClient()

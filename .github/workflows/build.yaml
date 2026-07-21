@@ -33,10 +33,10 @@ jobs:
 
       - name: Build
         run: |
-          pyinstaller --clean --noconfirm --windowed --name MyShare main.py
+          pyinstaller --clean --noconfirm --windowed --name LANFileTransfer main.py
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: MyShare-${{ matrix.artifact }}
+          name: LANFileTransfer-${{ matrix.artifact }}
           path: dist/

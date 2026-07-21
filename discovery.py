@@ -109,8 +109,8 @@ class Discovery:
 
         # Note that zeroconf does accept IP as a string, but socket.inet_aton() converts it into
         # byte format in order to comply with the official documentation
-        self.service_info: ServiceInfo = ServiceInfo(type_="_myshare._tcp.local.",
-                                   name= f"{self.hostname}._myshare._tcp.local.",
+        self.service_info: ServiceInfo = ServiceInfo(type_="_lanfiletransfer._tcp.local.",
+                                   name= f"{self.hostname}._lanfiletransfer._tcp.local.",
                                    addresses=[socket.inet_aton(self.ip_address)],
                                    port=transfer_port,
                                    properties=self.properties
@@ -122,7 +122,7 @@ class Discovery:
     def start(self):
 
         self.browser = ServiceBrowser(self.zeroconf,
-                                      "_myshare._tcp.local.",
+                                      "_lanfiletransfer._tcp.local.",
                                       self.listener
                                       )
 

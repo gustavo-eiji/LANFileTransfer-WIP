@@ -16,6 +16,7 @@ class MainWindow:
             transfer_client: TransferClient
     ):
 
+        self.progress_bar = None
         self.device_manager = device_manager
         self.discovery = discovery
         self.transfer_server = transfer_server
@@ -23,12 +24,13 @@ class MainWindow:
 
         self.root = tk.Tk()
 
-        self.root.title("MyShare Alpha 0.1")
+        self.root.title("LANFileTransfer Alpha 0.1")
         self.root.geometry("700x450")
 
         self.create_table()
         self.create_buttons()
         self.create_status_bar()
+        self.create_progress_bar()
 
         self.root.protocol(
             "WM_DELETE_WINDOW",
@@ -113,11 +115,22 @@ class MainWindow:
 
         filename = filedialog.askopenfilename()
 
+        if not filename:
+            return
+
+        self.progress.set(0)
+        self.status.set(f"Sending {filename}")
+
         self.transfer_client.send_file(
             filename,
             device.ip_address,
             device.port,
+            progress_callback=self.update_progress,
         )
+
+        self.status.set(f"{filename} Transfer Complete")
+
+        self.root.after(2000, lambda: self.progress.set(0))
 
     def create_status_bar(self):
 
@@ -137,15 +150,33 @@ class MainWindow:
             pady=10,
         )
 
+    def create_progress_bar(self):
+        self.progress = tk.DoubleVar(value=0)
 
-if __name__ == "__main__":
+        self.progress_bar = ttk.Progressbar(
+            self.root,
+            variable=self.progress,
+            maximum=100,
+            mode="determinate",
+        )
 
-    device_manager = DeviceManager()
-    transfer_client = TransferClient()
+        self.progress_bar.pack(
+            fill="x", padx=10, pady=(0, 10),
+                               )
 
-    gui = MainWindow(
-        device_manager,
-        transfer_client,
-    )
+    def update_progress(self, percent):
+        self.progress.set(percent)
+        self.root.update_idletasks()
 
-    gui.run()
+
+# if __name__ == "__main__":
+#
+#     device_manager = DeviceManager()
+#     transfer_client = TransferClient()
+
+    # gui = MainWindow(
+    #     device_manager,
+    #     transfer_client,
+    # )
+
+    # gui.run()
